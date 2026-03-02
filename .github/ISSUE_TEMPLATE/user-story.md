@@ -1,7 +1,7 @@
 ---
 name: user-story
 about: Вимоги користувача до функціоналу
-title: ''
+title: '[US] Назва функціональності'
 labels: user-story
 assignees: corvula
 
