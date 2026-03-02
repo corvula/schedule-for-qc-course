@@ -3,7 +3,7 @@ name: question
 about: Further information is requested
 title: '[QUESTION] Уточнення вимоги: "Текст вимоги коротко..."'
 labels: question
-assignees: 'corvula'
+assignees: corvula
 
 ---
 

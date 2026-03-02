@@ -1,14 +1,11 @@
 ---
 name: user-story
 about: Вимоги користувача до функціоналу
-title: '[US] Назва функціональності'
+title: "[USER_STORY] Назва функціональності"
 labels: user-story
 assignees: corvula
 
 ---
-
-Title: [US] Назва функціональності
-Labels: user-story
 
 ## User Story
 Як [роль],  
