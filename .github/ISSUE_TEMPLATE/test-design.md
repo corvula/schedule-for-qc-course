@@ -1,0 +1,20 @@
+---
+name: test-design
+about: Describe this issue template's purpose here.
+title: 'Title: Аналіз: "Назва функціоналу"'
+labels: ''
+assignees: corvula
+
+---
+
+## Функціонал
+Короткий опис того, що тестуємо.
+
+## Обрана техніка
+[EP & BV / Decision Table / State Transition]
+
+## Обґрунтування
+Чому саме ця техніка підходить для цього функціоналу.
+
+## Аналіз
+(таблиця або діаграма відповідно до обраної техніки)
