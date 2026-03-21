@@ -1,12 +1,11 @@
 ---
 name: bug
-about: Describe this issue template's purpose here.
+about: Помилки у функціоналі або розбіжності з вимогами.
 title: 'Title: Короткий опис проблеми'
-labels: 'bug'
+labels: bug
 assignees: corvula
 
 ---
-
 
 ## Опис
 Детальний опис того, що відбувається.
