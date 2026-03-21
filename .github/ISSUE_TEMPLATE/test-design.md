@@ -1,6 +1,6 @@
 ---
 name: test-design
-about: Describe this issue template's purpose here.
+about: Документація тест-кейвів, чек-листів та стратегій тестування.
 title: 'Title: Аналіз: "Назва функціоналу"'
 labels: ''
 assignees: corvula
