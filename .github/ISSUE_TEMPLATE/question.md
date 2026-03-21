@@ -1,6 +1,6 @@
 ---
 name: question
-about: Further information is requested
+about: Уточнення вимог
 title: '[QUESTION] Уточнення вимоги: "Текст вимоги коротко..."'
 labels: question
 assignees: corvula
