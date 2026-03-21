@@ -2,12 +2,11 @@
 name: bug
 about: Describe this issue template's purpose here.
 title: 'Title: Короткий опис проблеми'
-labels: ''
+labels: 'bug'
 assignees: corvula
 
 ---
 
-Labels: bug
 
 ## Опис
 Детальний опис того, що відбувається.
