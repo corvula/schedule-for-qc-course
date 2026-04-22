@@ -9,7 +9,9 @@ import com.softserve.exception.IncorrectPasswordException;
 import com.softserve.repository.UserRepository;
 import com.softserve.service.impl.MailServiceImpl;
 import com.softserve.service.impl.UserServiceImpl;
+import com.softserve.util.Constants;
 import com.softserve.util.PasswordGeneratingUtil;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.*;
 
@@ -148,6 +151,134 @@ class UserServiceTest {
         assertNotNull(result);
         assertEquals(user, result);
         verify(userRepository, times(1)).findByEmail(user.getEmail());
+    }
+
+    @Nested
+    class ChangePasswordForCurrentUserTests {
+
+        @Test
+        void shouldThrowIncorrectPasswordExceptionWhenOldPasswordIsIncorrect() {
+            User user = new User();
+            user.setPassword("encoded-current");
+
+            when(encoder.matches("wrong-password", "encoded-current")).thenReturn(false);
+
+            assertThrows(
+                    IncorrectPasswordException.class,
+                    () -> userService.changePasswordForCurrentUser(user, "wrong-password", "Valid1!a")
+            );
+        }
+
+        @Test
+        void shouldThrowIncorrectPasswordExceptionWhenNewPasswordIsInvalid() {
+            User user = new User();
+            user.setPassword("encoded-current");
+
+            when(encoder.matches("current-password", "encoded-current")).thenReturn(true);
+
+            assertThrows(
+                    IncorrectPasswordException.class,
+                    () -> userService.changePasswordForCurrentUser(user, "current-password", "short")
+            );
+        }
+
+        @Test
+        void shouldReturnEncodedPasswordWhenOldPasswordMatchesAndNewPasswordIsValid() {
+            User user = new User();
+            user.setPassword("encoded-current");
+
+            when(encoder.matches("current-password", "encoded-current")).thenReturn(true);
+            when(encoder.encode("Valid1!a")).thenReturn("encoded-new");
+
+            String result = userService.changePasswordForCurrentUser(user, "current-password", "Valid1!a");
+
+            assertEquals("encoded-new", result);
+        }
+    }
+
+    @Nested
+    class CreateSocialUserTests {
+
+        @Test
+        void shouldReturnExistingUserIfSocialEmailAlreadyExists() {
+            String email = "social@mail.com";
+            User existingUser = new User();
+            existingUser.setEmail(email);
+            existingUser.setId(1L);
+
+            OAuth2User oAuth2User = mock(OAuth2User.class);
+            when(oAuth2User.getAttribute(Constants.EMAIL)).thenReturn(email);
+            when(userRepository.findByEmail(email)).thenReturn(Optional.of(existingUser));
+
+            User result = userService.createSocialUser(oAuth2User);
+
+            assertNotNull(result);
+            assertEquals(existingUser, result);
+            verify(userRepository, times(1)).findByEmail(email);
+            verify(userRepository, never()).save(any());
+        }
+
+        @Test
+        void shouldCreateNewSocialUserWhenEmailDoesNotExist() {
+            String email = "newsocial@mail.com";
+            OAuth2User oAuth2User = mock(OAuth2User.class);
+            when(oAuth2User.getAttribute(Constants.EMAIL)).thenReturn(email);
+            when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+            when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+            User result = userService.createSocialUser(oAuth2User);
+
+            assertNotNull(result);
+            assertEquals(email, result.getEmail());
+            assertEquals(Role.ROLE_USER, result.getRole());
+            assertNull(result.getToken());
+            verify(userRepository, times(1)).findByEmail(email);
+            verify(userRepository, times(1)).save(any(User.class));
+        }
+
+        @Test
+        void shouldReturnExistingUserIfSocialEmailAlreadyExistsWithDifferentUserData() {
+            String email = "existing@mail.com";
+            User existingUser = new User();
+            existingUser.setEmail(email);
+            existingUser.setId(5L);
+            existingUser.setRole(Role.ROLE_ADMIN);
+
+            OAuth2User oAuth2User = mock(OAuth2User.class);
+            when(oAuth2User.getAttribute(Constants.EMAIL)).thenReturn(email);
+            when(userRepository.findByEmail(email)).thenReturn(Optional.of(existingUser));
+
+            User result = userService.createSocialUser(oAuth2User);
+
+            assertNotNull(result);
+            assertEquals(existingUser, result);
+            assertEquals(Role.ROLE_ADMIN, result.getRole());
+            verify(userRepository, times(1)).findByEmail(email);
+            verify(userRepository, never()).save(any());
+        }
+
+        @Test
+        void shouldCreateNewSocialUserWithCorrectRoleAndAttributes() {
+            String email = "newsocial2@mail.com";
+            OAuth2User oAuth2User = mock(OAuth2User.class);
+            when(oAuth2User.getAttribute(Constants.EMAIL)).thenReturn(email);
+            when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+            when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
+                User user = invocation.getArgument(0);
+                user.setId(10L);
+                return user;
+            });
+
+            User result = userService.createSocialUser(oAuth2User);
+
+            assertNotNull(result);
+            assertEquals(email, result.getEmail());
+            assertEquals(Role.ROLE_USER, result.getRole());
+            assertNull(result.getToken());
+            assertEquals(10L, result.getId());
+            verify(userRepository, times(1)).findByEmail(email);
+            verify(userRepository, times(1)).save(any(User.class));
+        }
     }
 
     @Test

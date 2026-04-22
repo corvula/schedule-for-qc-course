@@ -11,10 +11,10 @@ export const getClearOrCancelTitle = (id, t) => {
     return id === undefined ? t(CLEAR_BUTTON_LABEL) : t(CANCEL_BUTTON_TITLE);
 };
 
-export const setDisabledSaveButtonSemester = (pristine, submitting, semester, selectedGroups) => {
+export const setDisabledSaveButtonSemester = (pristine, submitting, semester, selectedGroups = []) => {
     if (!isEmpty(semester) && semester.id) {
-        const beginGroups = semester.semester_groups.map((item) => item.id);
-        const restGroups = selectedGroups.map((item) => item.id);
+        const beginGroups = semester.semester_groups?.map((item) => item.id) ?? [];
+        const restGroups = (selectedGroups ?? []).map((item) => item.id);
         const newGroups = restGroups.filter((group) => !beginGroups.includes(group));
         const deleteGroups = beginGroups.filter((group) => !restGroups.includes(group));
         const isChosenGroup =

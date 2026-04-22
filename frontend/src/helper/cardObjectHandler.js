@@ -1,15 +1,15 @@
-export const cardObjectHandler = (card, semester, link) => {
+export const cardObjectHandler = (card = {}, semester, link) => {
     return {
-        id: Number(card.lessonCardId),
-        hours: Number(card.hours),
+        id: Number(card.lessonCardId ?? 0),
+        hours: Number(card.hours ?? 0),
         subject: {
-            id: Number(card.subject.id),
+            id: Number(card.subject?.id ?? 0),
         },
         lessonType: card.type,
         subjectForSite: card.subjectForSite,
         teacher: card.teacher,
         linkToMeeting: link,
-        groups: card.groups,
+        groups: card.groups ?? [],
         grouped: card.grouped,
         semester,
     };
