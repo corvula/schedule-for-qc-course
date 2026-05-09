@@ -1,4 +1,4 @@
-import {cardObjectHandler} from './cardObjectHandler';
+import { cardObjectHandler } from './cardObjectHandler';
 
 describe('cardObjectHandler function', () => {
     const card = {
@@ -17,7 +17,7 @@ describe('cardObjectHandler function', () => {
         groups: [{ id: 12, title: '123' }],
         grouped: true,
     };
-    const link = 'http://youtube.com'\;
+    const link = 'http://youtube.com';
     const semester = { id: 6 };
 
     it('should return correct values', () => {
@@ -46,7 +46,6 @@ describe('cardObjectHandler function', () => {
             groups: [],
             grouped: false,
         };
-
         expect(cardObjectHandler(stringCard, semester, link)).toEqual({
             id: 0,
             hours: 5,
@@ -78,6 +77,7 @@ describe('cardObjectHandler function', () => {
 
     describe('Edge cases for cardObjectHandler', () => {
         it('should handle card with id=0', () => {
+            // Arrange
             const cardWithZeroId = {
                 lessonCardId: 0,
                 hours: 2,
@@ -88,12 +88,15 @@ describe('cardObjectHandler function', () => {
                 groups: [],
                 grouped: true,
             };
+            // Act
             const result = cardObjectHandler(cardWithZeroId, semester, link);
+            // Assert
             expect(result.id).toBe(0);
             expect(result.hours).toBe(2);
         });
 
         it('should handle card with null id', () => {
+            // Arrange
             const cardWithNullId = {
                 lessonCardId: null,
                 hours: 3,
@@ -103,29 +106,38 @@ describe('cardObjectHandler function', () => {
                 groups: [],
                 grouped: false,
             };
+            // Act
             const result = cardObjectHandler(cardWithNullId, semester, link);
+            // Assert
             expect(result.id).toBe(0);
         });
 
         it('should handle card with undefined id', () => {
+            // Arrange
             const cardWithUndefinedId = {
                 lessonCardId: undefined,
                 hours: 4,
                 subject: { id: 3 },
                 type: 'practice',
             };
+            // Act
             const result = cardObjectHandler(cardWithUndefinedId, semester, link);
+            // Assert
             expect(result.id).toBe(0);
         });
 
         it('should handle null semester', () => {
+            // Arrange
             const nullSemester = null;
+            // Act
             const result = cardObjectHandler(card, nullSemester, link);
+            // Assert
             expect(result.semester).toBe(null);
             expect(result.id).toBe(card.lessonCardId);
         });
 
         it('should handle card with null teacher', () => {
+            // Arrange
             const cardWithNullTeacher = {
                 lessonCardId: 20,
                 hours: 2,
@@ -135,11 +147,14 @@ describe('cardObjectHandler function', () => {
                 groups: [],
                 grouped: true,
             };
+            // Act
             const result = cardObjectHandler(cardWithNullTeacher, semester, link);
+            // Assert
             expect(result.teacher).toBe(null);
         });
 
         it('should handle card with null subject', () => {
+            // Arrange
             const cardWithNullSubject = {
                 lessonCardId: 21,
                 hours: 2,
@@ -149,17 +164,23 @@ describe('cardObjectHandler function', () => {
                 groups: [],
                 grouped: true,
             };
+            // Act
             const result = cardObjectHandler(cardWithNullSubject, semester, link);
+            // Assert
             expect(result.subject.id).toBe(0);
         });
 
         it('should handle null link parameter', () => {
+            // Arrange
             const nullLink = null;
+            // Act
             const result = cardObjectHandler(card, semester, nullLink);
+            // Assert
             expect(result.linkToMeeting).toBe(null);
         });
 
         it('should convert string numeric id to number', () => {
+            // Arrange
             const cardWithStringId = {
                 lessonCardId: '99',
                 hours: 2,
@@ -169,12 +190,15 @@ describe('cardObjectHandler function', () => {
                 groups: [],
                 grouped: true,
             };
+            // Act
             const result = cardObjectHandler(cardWithStringId, semester, link);
+            // Assert
             expect(result.id).toBe(99);
             expect(typeof result.id).toBe('number');
         });
 
         it('should preserve multiple groups', () => {
+            // Arrange
             const cardWithMultipleGroups = {
                 lessonCardId: 23,
                 hours: 2,
@@ -187,11 +211,14 @@ describe('cardObjectHandler function', () => {
                 ],
                 grouped: true,
             };
+            // Act
             const result = cardObjectHandler(cardWithMultipleGroups, semester, link);
+            // Assert
             expect(result.groups).toHaveLength(2);
         });
 
         it('should handle card with null groups', () => {
+            // Arrange
             const cardWithNullGroups = {
                 lessonCardId: 24,
                 hours: 2,
@@ -201,7 +228,9 @@ describe('cardObjectHandler function', () => {
                 groups: null,
                 grouped: true,
             };
+            // Act
             const result = cardObjectHandler(cardWithNullGroups, semester, link);
+            // Assert
             expect(result.groups).toEqual([]);
         });
     });
