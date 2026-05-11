@@ -61,6 +61,7 @@ describe('cardObjectHandler function', () => {
     });
 
     it('should handle empty card object without throwing', () => {
+        // card={} → всі поля undefined/null → Number(0)=0, groups=[]
         expect(cardObjectHandler({}, semester, link)).toEqual({
             id: 0,
             hours: 0,
@@ -76,7 +77,8 @@ describe('cardObjectHandler function', () => {
     });
 
     describe('Edge cases for cardObjectHandler', () => {
-        it('should handle card with id=0', () => {
+
+        it('should handle card with id=0 — Number(0) stays 0', () => {
             // Arrange
             const cardWithZeroId = {
                 lessonCardId: 0,
@@ -95,7 +97,7 @@ describe('cardObjectHandler function', () => {
             expect(result.hours).toBe(2);
         });
 
-        it('should handle card with null id', () => {
+        it('should handle card with null id — Number(null ?? 0) = 0', () => {
             // Arrange
             const cardWithNullId = {
                 lessonCardId: null,
@@ -108,11 +110,11 @@ describe('cardObjectHandler function', () => {
             };
             // Act
             const result = cardObjectHandler(cardWithNullId, semester, link);
-            // Assert
+            // Assert — null ?? 0 → 0, Number(0) = 0
             expect(result.id).toBe(0);
         });
 
-        it('should handle card with undefined id', () => {
+        it('should handle card with undefined id — Number(undefined ?? 0) = 0', () => {
             // Arrange
             const cardWithUndefinedId = {
                 lessonCardId: undefined,
@@ -122,11 +124,11 @@ describe('cardObjectHandler function', () => {
             };
             // Act
             const result = cardObjectHandler(cardWithUndefinedId, semester, link);
-            // Assert
+            // Assert — undefined ?? 0 → 0
             expect(result.id).toBe(0);
         });
 
-        it('should handle null semester', () => {
+        it('should handle null semester — passes null through to result.semester', () => {
             // Arrange
             const nullSemester = null;
             // Act
@@ -136,8 +138,8 @@ describe('cardObjectHandler function', () => {
             expect(result.id).toBe(card.lessonCardId);
         });
 
-        it('should handle card with null teacher', () => {
-            // Arrange
+        it('should handle card with null teacher — passes null through', () => {
+            // Arrange — teacher передається як є, без трансформацій
             const cardWithNullTeacher = {
                 lessonCardId: 20,
                 hours: 2,
@@ -153,7 +155,7 @@ describe('cardObjectHandler function', () => {
             expect(result.teacher).toBe(null);
         });
 
-        it('should handle card with null subject', () => {
+        it('should handle card with null subject — subject?.id = undefined → Number(0) = 0', () => {
             // Arrange
             const cardWithNullSubject = {
                 lessonCardId: 21,
@@ -166,11 +168,11 @@ describe('cardObjectHandler function', () => {
             };
             // Act
             const result = cardObjectHandler(cardWithNullSubject, semester, link);
-            // Assert
+            // Assert — null?.id = undefined → undefined ?? 0 → 0
             expect(result.subject.id).toBe(0);
         });
 
-        it('should handle null link parameter', () => {
+        it('should handle null link — passes null through to linkToMeeting', () => {
             // Arrange
             const nullLink = null;
             // Act
@@ -192,7 +194,7 @@ describe('cardObjectHandler function', () => {
             };
             // Act
             const result = cardObjectHandler(cardWithStringId, semester, link);
-            // Assert
+            // Assert — Number('99') = 99
             expect(result.id).toBe(99);
             expect(typeof result.id).toBe('number');
         });
@@ -217,7 +219,7 @@ describe('cardObjectHandler function', () => {
             expect(result.groups).toHaveLength(2);
         });
 
-        it('should handle card with null groups', () => {
+        it('should handle card with null groups — null ?? [] gives []', () => {
             // Arrange
             const cardWithNullGroups = {
                 lessonCardId: 24,
@@ -230,7 +232,7 @@ describe('cardObjectHandler function', () => {
             };
             // Act
             const result = cardObjectHandler(cardWithNullGroups, semester, link);
-            // Assert
+            // Assert — null ?? [] → []
             expect(result.groups).toEqual([]);
         });
     });
