@@ -175,6 +175,12 @@ describe('setDisabledSaveButtonSemester function', () => {
             expect(result).toBeFalsy();
         });
 
+        it('should handle undefined selectedGroups with valid semester that has groups', () => {
+            const semesterWithGroups = { id: 47, semester_groups: [{ id: 52 }] };
+            const result = setDisabledSaveButtonSemester(false, false, semesterWithGroups, undefined);
+            expect(result).toBeFalsy();
+        });
+
         it('should return true when submitting is true and no group changes', () => {
             const pristine = false;
             const submitting = true;
@@ -187,6 +193,12 @@ describe('setDisabledSaveButtonSemester function', () => {
             const pristine = false;
             const submitting = false;
             const result = setDisabledSaveButtonSemester(pristine, submitting, semesterWithoutGroups, selectedGroups);
+            expect(result).toBeFalsy();
+        });
+
+        it('should handle semester without semester_groups and empty selectedGroups', () => {
+            const semesterWithoutGroups = { id: 50 };
+            const result = setDisabledSaveButtonSemester(false, false, semesterWithoutGroups, []);
             expect(result).toBeFalsy();
         });
 
