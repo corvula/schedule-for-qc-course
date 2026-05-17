@@ -31,4 +31,9 @@
 branch — це артефакт інструменту, не проблема тестів.
 
 ## Скріншот
-[вставити скріншот таблиці coverage]
+<img width="841" height="871" alt="Знімок екрана 2026-05-10 о 10 41 51 пп" src="https://github.com/user-attachments/assets/f69916ae-2134-4032-b0a0-672236a25bf1" />
+
+<img width="887" height="644" alt="Знімок екрана 2026-05-10 о 11 09 30 пп" src="https://github.com/user-attachments/assets/9f539d71-55a1-44ca-8699-90d65568ea6a" />
+
+<img width="1325" height="547" alt="Знімок екрана 2026-05-11 о 11 17 57 дп" src="https://github.com/user-attachments/assets/935d28db-e2e4-4903-ab5a-fa17d922aae6" />
+
