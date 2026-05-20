@@ -1,0 +1,26 @@
+name: schedule-local
+values:
+  - key: baseUrl
+    value: 'http://localhost:8081'
+  - key: token
+    value: ''
+  - key: roomId
+    value: ''
+  - key: roomTitle
+    value: ''
+  - key: roomUpdatedTitle
+    value: ''
+  - key: roomTypeId
+    value: '1'
+  - key: scheduleId
+    value: ''
+  - key: semesterId
+    value: '1'
+  - key: groupId
+    value: '1'
+  - key: scheduleLessonId
+    value: '1'
+  - key: schedulePeriodId
+    value: '1'
+  - key: scheduleRoomId
+    value: '1'

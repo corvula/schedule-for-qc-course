@@ -1,0 +1,26 @@
+$kind: http-request
+url: "{{baseUrl}}/schedules/full/groups?semesterId={{semesterId}}&groupId={{groupId}}"
+method: GET
+headers:
+  Authorization: Bearer_{{token}}
+queryParams:
+  semesterId: "{{semesterId}}"
+  groupId: "{{groupId}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200", () => {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has semester and schedule fields", () => {
+          const json = pm.response.json();
+          pm.expect(json).to.have.property('semester');
+          pm.expect(json).to.have.property('schedule');
+      });
+
+      pm.test("Response time is less than 500ms", () => {
+          pm.expect(pm.response.responseTime).to.be.below(500);
+      });
+    language: text/javascript
+order: 4000

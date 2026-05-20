@@ -1,0 +1,42 @@
+$kind: http-request
+url: "{{baseUrl}}/schedules"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer_{{token}}
+body:
+  type: text
+  content: |-
+    {
+        "lessonId": {{scheduleLessonId}},
+        "periodId": {{schedulePeriodId}},
+        "roomId": {{scheduleRoomId}},
+        "dayOfWeek": "WEDNESDAY",
+        "evenOdd": "ODD"
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      if (!pm.environment.get('scheduleId')) {
+          console.warn('scheduleId is not set, skipping.');
+          pm.execution.skipRequest();
+      }
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 400", () => {
+          pm.response.to.have.status(400);
+      });
+
+      pm.test("Response contains error message about conflict", () => {
+          const json = pm.response.json();
+          pm.expect(json).to.satisfy((body) => {
+              return body.hasOwnProperty('message') || body.hasOwnProperty('error') || body.hasOwnProperty('status');
+          });
+      });
+
+      pm.test("Response time is less than 1000ms", () => {
+          pm.expect(pm.response.responseTime).to.be.below(1000);
+      });
+    language: text/javascript
+order: 6000

@@ -1,0 +1,32 @@
+$kind: http-request
+url: "{{baseUrl}}/schedules/{{scheduleId}}"
+method: DELETE
+headers:
+  Authorization: Bearer_{{token}}
+scripts:
+  - type: beforeRequest
+    code: |-
+      if (!pm.environment.get('scheduleId')) {
+          console.warn('scheduleId is not set, skipping.');
+          pm.execution.skipRequest();
+      }
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200", () => {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response is an array of deleted IDs", () => {
+          const json = pm.response.json();
+          pm.expect(json).to.be.an('array');
+          pm.expect(json.length).to.be.above(0);
+      });
+
+      pm.test("Response time is less than 1000ms", () => {
+          pm.expect(pm.response.responseTime).to.be.below(1000);
+      });
+
+      pm.environment.unset("scheduleId");
+    language: text/javascript
+order: 7000

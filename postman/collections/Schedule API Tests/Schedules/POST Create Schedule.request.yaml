@@ -1,0 +1,55 @@
+$kind: http-request
+url: "{{baseUrl}}/schedules"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer_{{token}}
+body:
+  type: text
+  content: |-
+    {
+        "lessonId": {{scheduleLessonId}},
+        "periodId": {{schedulePeriodId}},
+        "roomId": {{scheduleRoomId}},
+        "dayOfWeek": "WEDNESDAY",
+        "evenOdd": "ODD"
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      // Uses IDs from initial application data:
+      // lessonId=1 (LECTURE, group 1, semester 1),
+      // periodId=1 (1st class period),
+      // scheduleRoomId=1 (room from initial data).
+      // These are configurable in the environment file.
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 201", () => {
+          pm.response.to.have.status(201);
+      });
+
+      pm.test("Response is an array with created schedule", () => {
+          const json = pm.response.json();
+          pm.expect(json).to.be.an('array');
+          pm.expect(json.length).to.be.above(0);
+      });
+
+      pm.test("Created schedule has id", () => {
+          const json = pm.response.json();
+          pm.expect(json[0]).to.have.property('id');
+          pm.expect(json[0].id).to.be.a('number');
+      });
+
+      pm.test("Response time is less than 1000ms", () => {
+          pm.expect(pm.response.responseTime).to.be.below(1000);
+      });
+
+      if (pm.response.code === 201) {
+          const json = pm.response.json();
+          if (json.length > 0) {
+              pm.environment.set("scheduleId", json[0].id);
+          }
+      }
+    language: text/javascript
+order: 1000

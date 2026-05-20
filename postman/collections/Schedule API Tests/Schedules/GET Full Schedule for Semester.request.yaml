@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{baseUrl}}/schedules/full/semester?semesterId={{semesterId}}"
+method: GET
+headers:
+  Authorization: Bearer_{{token}}
+queryParams:
+  semesterId: "{{semesterId}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200", () => {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response is not null", () => {
+          pm.expect(pm.response.json()).to.not.be.null;
+      });
+
+      pm.test("Response time is less than 500ms", () => {
+          pm.expect(pm.response.responseTime).to.be.below(500);
+      });
+    language: text/javascript
+order: 5000
