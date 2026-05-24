@@ -31,7 +31,6 @@
 branch — це артефакт інструменту, не проблема тестів.
 
 ## Скріншот
-<img width="841" height="871" alt="Знімок екрана 2026-05-10 о 10 41 51 пп" src="https://github.com/user-attachments/assets/f69916ae-2134-4032-b0a0-672236a25bf1" />
 
 <img width="887" height="644" alt="Знімок екрана 2026-05-10 о 11 09 30 пп" src="https://github.com/user-attachments/assets/9f539d71-55a1-44ca-8699-90d65568ea6a" />
 
