@@ -2,7 +2,7 @@
 name: bug
 about: Помилки у функціоналі або розбіжності з вимогами
 title: 'Title: Короткий опис проблеми'
-labels: bug
+labels: bug, user-story
 assignees: corvula
 
 ---
