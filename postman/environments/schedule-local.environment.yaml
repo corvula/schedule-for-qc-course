@@ -4,16 +4,12 @@ values:
     value: 'http://localhost:8081'
   - key: token
     value: ''
-  - key: roomId
-    value: ''
   - key: roomTitle
     value: ''
   - key: roomUpdatedTitle
     value: ''
   - key: roomTypeId
     value: '1'
-  - key: scheduleId
-    value: ''
   - key: semesterId
     value: '1'
   - key: groupId

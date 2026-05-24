@@ -45,6 +45,9 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() {
+        if (secret == null || secret.isBlank()) {
+            throw new IllegalStateException("JWT secret (app.jwt.token.secret) must not be empty");
+        }
         String paddedSecret = secret;
         while (paddedSecret.getBytes(StandardCharsets.UTF_8).length < 32) {
             paddedSecret += secret;

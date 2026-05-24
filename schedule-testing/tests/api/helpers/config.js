@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  baseUrl: process.env.BASE_URL || 'http://localhost:8081',
+  baseUrl: process.env.BASE_URL || 'http://localhost:8080',
 
   auth: {
     email: process.env.TEST_EMAIL || 'manager@gmail.com',
